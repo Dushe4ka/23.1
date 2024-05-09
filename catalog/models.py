@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 
 # Product
 # Наименование
@@ -20,8 +20,19 @@ class Category(models.Model):
         help_text="Введите название категории",
     )
     description = models.TextField(
-        verbose_name="Описание", help_text="Введите описание"
+        verbose_name="Описание",
+        help_text="Введите описание",
+        blank=True,
+        null=True,
+        default=None,
+        unique=True,
+        db_index=True,
     )
+
+    @classmethod
+    def truncate_table_restart_id(cls):
+        with connection.cursor() as cursor:
+            cursor.execute(f'TRUNCATE TABLE {cls._meta.db_table} RESTART IDENTITY CASCADE')
 
     class Meta:
         verbose_name = "Категория"
@@ -43,6 +54,9 @@ class Product(models.Model):
         upload_to="product/photo",
         verbose_name="Изображение",
         help_text="Загрузите изображение",
+        blank=True,
+        null=True,
+        default=None,
     )
     category = models.ForeignKey(
         Category,
@@ -79,4 +93,4 @@ class Product(models.Model):
         ordering = ["name", "category", "price", "created_at"]
 
     def __str__(self):
-        return self.name, self.category, self.price, self.created_at
+        return f'self.name, self.category, self.price, self.created_at'

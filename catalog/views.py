@@ -1,9 +1,25 @@
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView, ListView, DetailView
+
 from catalog.models import Product
 
 
 # def home(request):
 #     return render(request, 'home.html')
+
+class ContactsTemplateView(TemplateView):
+    template_name = 'catalog/contacts.html'
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+
+        print(f"\n\nИмя - {name}\n"
+              f"Телефон - {phone}\n"
+              f"Сообщение - {message}\n\n")
+
+        return super().get(request, *args, **kwargs)
 
 
 def contacts(request):
@@ -19,13 +35,10 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-def home(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, 'Product_list.html', context)
+class ProductListView(ListView):
+    model = Product
 
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product}
-    return render(request, 'Product_detail.html', context)
+class ProductDetailView(DetailView):
+    model = Product
+

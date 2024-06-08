@@ -1,5 +1,5 @@
 from django.contrib import admin
-from catalog.models import Category, Product
+from catalog.models import Category, Product, Version
 
 
 # Для моделей категории и продукта настройте отображение в административной панели.
@@ -20,3 +20,9 @@ class ProductAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
 
     list_display = ("id", "name")
+
+
+@admin.register(Version)
+class VersionAdmin(admin.ModelAdmin):
+    list_display = ("id", "product", "version_number", "version_name", "is_current_version")
+

@@ -9,13 +9,14 @@
                     <img src = "{{ product.image | media_filter }}">
                     <div class="card-body">
                         <p class="card-text">{{ object.name }}</p>
-                        <p class="card-text">Категория: {{ object.category }}</p>
                         <p class="card-text">Описание: {{ object.description }}</p>
+                        <p class="card-text">Дата создания: {{ object.created_at }}</p>
+                        <p class="card-text">Просмотры: {{ object.views }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'catalog:list' %}" role="button">Вернуться</a>
                             </div>
-                            <small class="text-body-secondary">9 mins</small>
+<!--                            <small class="text-body-secondary">Просмотры: {{ object.views }}</small>-->
                         </div>
                     </div>
                 </div>

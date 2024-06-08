@@ -4,23 +4,27 @@
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for product in object_list %}
-            <div class="col">
-                <div class="card shadow-sm">
-                    <img src="{{ product.image | media_filter }}">
-                    <div class="card-body">
-                        <p class="card-text">{{ product.name }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'catalog:product' product.pk %}" role="button">Посмотреть</a>
+            <div class="row text-center">
+                {% for object in object_list %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <p class="card-text">{{ object.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group-center">
+                                    <a class="btn btn-primary" href="{% url 'catalog:view' object.pk %}"
+                                       role="button">Посмотреть</a>
+                                    <a class="btn btn-primary" href="{% url 'catalog:edit' object.pk %}"
+                                       role="button">Редактировать</a>
+                                    <a class="btn btn-warning" href="{% url 'catalog:delete' object.pk %}"
+                                       role="button">Удалить</a>
+                                </div>
                             </div>
-                            <small class="text-body-secondary">9 mins</small>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}

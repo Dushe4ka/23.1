@@ -10,7 +10,8 @@ from blog.models import Blog
 # При этом интерфейс вывода продуктов настройте так,
 # чтобы можно было результат отображения фильтровать по категории,
 # а также осуществлять поиск по названию и полю описания.
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "contents")
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "content")
     list_filter = ("title",)
-    search_fields = ("title", "contents",)
+    search_fields = ("title", "content",)

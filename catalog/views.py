@@ -47,13 +47,13 @@ class ProductCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        VersionFromset = inlineformset_factory(Product, Version, VersionForm, extra=1)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
         if self.request.method == "POST":
-            context_data["formset"] = VersionFromset(
+            context_data["formset"] = VersionFormset(
                 self.request.POST, instance=self.object
             )
         else:
-            context_data["formset"] = VersionFromset(instance=self.object)
+            context_data["formset"] = VersionFormset(instance=self.object)
         return context_data
 
     def form_valid(self, form):
@@ -66,6 +66,7 @@ class ProductCreateView(CreateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
+
 
 class ProductUpdateView(UpdateView):
     model = Product

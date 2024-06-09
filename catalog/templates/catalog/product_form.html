@@ -1,12 +1,10 @@
 {% extends 'catalog/home.html' %}
 {% load my_tags %}
 {% block content %}
-
 <div class="container">
-    <div class="row">
-        <div class="col-6">
-
-            <form class="row" , method="post" enctype="multipart/form-data">
+    <form method="post">
+        <div class="row">
+            <div class="col-6">
                 <div class="card">
                     {% if object %}
                     <p class="card-text">Редактирование продукта</p>
@@ -25,20 +23,20 @@
                         {% endif%}
                     </button>
                 </div>
-            </form>
-        </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
-                    <form method="post">
-                    {{ formset.management_form }}
-                    {% for form in formset.forms %}
-                    {{ form.as_p }}
-                    {% endfor %}
-                    </form>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        {{ formset.management_form }}
+                        {% for form in formset.forms %}
+                        {{ form.as_p }}
+                        {% endfor %}
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}

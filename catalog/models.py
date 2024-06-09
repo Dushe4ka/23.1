@@ -45,7 +45,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(
-        max_length=100, verbose_name="Продукт", help_text="Введите наименование"
+        max_length=100, verbose_name="Продукт", help_text="Введите наименование",
     )
     description = models.TextField(
         verbose_name="Описание", help_text="Введите описание"
@@ -102,38 +102,17 @@ class Product(models.Model):
 
 
 class Version(models.Model):
-    product = models.ForeignKey(
-        Product,
-        related_name='versions',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name='Продукт',
-
-    )
-    version_number = models.PositiveIntegerField(
-        default=1,
-        verbose_name="Номер версии",
-        help_text="Введите номер версии",
-        unique=True,
-
-    )
-    version_name = models.CharField(
-        max_length=255,
-        verbose_name="Наименование версии",
-        help_text="Введите наименование версии",
-    )
-    is_current_version = models.BooleanField(
-        default=False,
-        verbose_name="Аквтивная версия",
-    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions", verbose_name='Продукт')
+    number = models.PositiveIntegerField(verbose_name='Номер версии', default=1)
+    name = models.CharField(max_length=100, verbose_name='Название версии', default='V_1')
+    is_current = models.BooleanField(default=False, verbose_name='Актуальная')
 
     class Meta:
         verbose_name = "Версия товара"
         verbose_name_plural = "Версии товара"
 
     def __str__(self):
-        return f'{self.product.name} - {self.version_number} ({self.version_name})'
+        return f'{self.product.name} - {self.number} ({self.name})'
 
 
 

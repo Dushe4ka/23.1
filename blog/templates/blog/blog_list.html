@@ -3,28 +3,27 @@
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="row text-center">
-                {% for object in object_list %}
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <p class="card-text">{{ object.title }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group-center">
-                                    <a class="btn btn-primary" href="{% url 'blog:view' object.pk %}"
-                                       role="button">Посмотреть</a>
-                                    <a class="btn btn-primary" href="{% url 'blog:edit' object.pk %}"
-                                       role="button">Редактировать</a>
-                                    <a class="btn btn-warning" href="{% url 'blog:delete' object.pk %}"
-                                       role="button">Удалить</a>
-                                </div>
+        <div class="row text-center">
+            {% for object in object_list %}
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">{{ object.title }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group-center">
+                                <a class="btn btn-primary" href="{% url 'blog:view' object.pk %}"
+                                   role="button">Посмотреть</a>
+                                <a class="btn btn-primary" href="{% url 'blog:edit' object.pk %}"
+                                   role="button">Редактировать</a>
+                                <a class="btn btn-warning" href="{% url 'blog:delete' object.pk %}"
+                                   role="button">Удалить</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endblock %}
+</div>>
+{% endblock %}

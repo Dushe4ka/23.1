@@ -1,5 +1,8 @@
 from django.db import models, connection
 
+from users.models import User
+
+
 # Product
 # Наименование
 # Описание
@@ -91,6 +94,7 @@ class Product(models.Model):
         default=0,
         verbose_name='просмотры',
     )
+    owner = models.ForeignKey(User, verbose_name="Владелец", null=True, blank=True, help_text='Укажите владельца продукта', on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = "Продукт"

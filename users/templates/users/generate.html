@@ -1,9 +1,14 @@
 {% extends 'blog/home_blog.html' %}
 {% load my_tags %}
 {% block content %}
-<div class="container">
-    <form class="row" method="post" enctype="multipart/form-data">
-        <div class="col-6">
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">LILIYA</h1>
+    <p class="lead">Восстановление пароля</p>
+</div>
+<form method="post" enctype="multipart/form-data">
+    <div class="container">
+                <div class="col-6">
             <div class="card">
 
                 <div class="card-body">
@@ -11,13 +16,14 @@
                     {{ form.as_p}}
                 </div>
                 <button type="submit" class="btn btn-success">
-                    Войти
+                    Отправить
                 </button>
-                <a class="p-2 btn-outline-primary" href="{% url 'users:generate' %}">Восстановить пароль</a>
 
             </div>
         </div>
-    </form>
-</div>
+
+    </div>
+</form>
+
 
 {% endblock %}

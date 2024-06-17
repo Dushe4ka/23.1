@@ -14,10 +14,12 @@
                                 <div class="btn-group-center">
                                     <a class="btn btn-primary" href="{% url 'catalog:view' object.pk %}"
                                        role="button">Посмотреть</a>
+                                    {% if user.is_authenticated %}
                                     <a class="btn btn-primary" href="{% url 'catalog:edit' object.pk %}"
                                        role="button">Редактировать</a>
                                     <a class="btn btn-warning" href="{% url 'catalog:delete' object.pk %}"
                                        role="button">Удалить</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

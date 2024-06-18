@@ -13,10 +13,14 @@
                             <div class="btn-group-center">
                                 <a class="btn btn-primary" href="{% url 'blog:view' object.pk %}"
                                    role="button">Посмотреть</a>
+                                {% if perms.blog.change_blog %}
                                 <a class="btn btn-primary" href="{% url 'blog:edit' object.pk %}"
                                    role="button">Редактировать</a>
+                                {% endif %}
+                                {% if perms.blog.delete_blog %}
                                 <a class="btn btn-warning" href="{% url 'blog:delete' object.pk %}"
                                    role="button">Удалить</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

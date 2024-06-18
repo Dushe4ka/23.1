@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -6,14 +8,23 @@ from django.views.generic import CreateView, ListView, DeleteView, DetailView, U
 from django.views.generic import TemplateView, ListView, DetailView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Version
 
 
+# @login_required
+# def index(request):
+#     product_list = Product.objects.all()
+#     context = {
+#         'product_list': product_list,
+#         'title': 'Главная'
+#     }
+#     return render(request, 'catalog/home.html', context)
 # def home(request):
 #     return render(request, 'home.html')
 
-class ContactsTemplateView(TemplateView):
+
+class ContactsTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'catalog/contacts.html'
 
     def post(self, request, *args, **kwargs):
@@ -28,6 +39,7 @@ class ContactsTemplateView(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
+@login_required
 def contacts(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -41,7 +53,7 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-class ProductCreateView(CreateView, LoginRequiredMixin):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:list')
@@ -71,7 +83,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductUpdateView(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:list')
@@ -99,12 +111,20 @@ class ProductUpdateView(UpdateView, LoginRequiredMixin, PermissionRequiredMixin)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.can_edit_category") and user.has_perm("catalog.can_edit_description") and user.has_perm("catalog.can_edit_is_published"):
+            return ProductModeratorForm
+        raise PermissionDenied
 
-class ProductListView(ListView, LoginRequiredMixin):
+
+class ProductListView(ListView):
     model = Product
 
 
-class ProductDetailView(DetailView, LoginRequiredMixin):
+class ProductDetailView(DetailView):
     model = Product
 
     def get_object(self, queryset=None):
@@ -114,7 +134,11 @@ class ProductDetailView(DetailView, LoginRequiredMixin):
         return self.object
 
 
-class ProductDeleteView(DeleteView, PermissionRequiredMixin, LoginRequiredMixin):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:list')
 
+"""
+    Создание фикстуры для групп:
+    python manage.py dumpdata auth > groups.json
+"""

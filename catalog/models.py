@@ -101,11 +101,20 @@ class Product(models.Model):
         blank=True,
         help_text='Укажите владельца продукта',
         on_delete=models.SET_NULL)
+    is_published = models.BooleanField(default=False,
+                                       null=True,
+                                       blank=True,
+                                       verbose_name="Статус публикации")
 
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name", "category", "price", "created_at"]
+        permissions = [
+            ("can_edit_category", "Can edit category"),
+            ("can_edit_description", "Can edit description"),
+            ("can_edit_is_published", "Can edit is published")
+        ]
 
     def __str__(self):
         return f'{self.name}, {self.category}, {self.price}, {self.created_at}'

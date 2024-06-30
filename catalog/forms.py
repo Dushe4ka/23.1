@@ -1,6 +1,6 @@
 from django.forms import ModelForm, forms, BooleanField
 
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
 
 forbidden_words = [
     "казино",
@@ -54,7 +54,27 @@ class ProductModeratorForm(StyleFormMixin, ModelForm):
 class VersionForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Version
-        fields = '__all__'
+        fields = "__all__"
+
+
+class CategoryForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+    def clean_name(self):
+        cleaned_data = self.cleaned_data['name']
+        for word in forbidden_words:
+            if word.lower() in cleaned_data.lower():
+                raise forms.ValidationError('Название не должно содержать запрещённых слов')
+            else:
+                return cleaned_data
+
+    def clean_description(self):
+        cleaned_data = self.cleaned_data['description']
+        if cleaned_data.lower() in forbidden_words:
+            raise forms.ValidationError('Описание не должно содержать запрещённых слов')
+        return cleaned_data
 
 
 

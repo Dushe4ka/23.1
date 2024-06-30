@@ -9,7 +9,8 @@ from django.views.generic import TemplateView, ListView, DetailView
 from pytils.translit import slugify
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
+from catalog.services import get_catalog_from_cache
 
 
 # @login_required
@@ -134,10 +135,32 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class ProductDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:list')
 
+
+class CategoryListView(ListView):
+    model = Category
+
+    def get_queryset(self):
+        return get_catalog_from_cache()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категории продуктов'
+        return context
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_item = self.get_object()
+        context['category_item'] = category_item
+        context['title'] = f'Категория #{category_item.pk}'
+        return context
 """
     Создание фикстуры для групп:
     python manage.py dumpdata auth > groups.json

@@ -84,6 +84,13 @@ class Product(models.Model):
         auto_now_add=True,
         verbose_name="Дата создания",
     )
+    release_date = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Дата выпуска",
+        help_text="Укажите дату выпуска"
+
+    )
     updated_at = models.DateTimeField(
         null=True,
         blank=True,

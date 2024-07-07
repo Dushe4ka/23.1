@@ -9,7 +9,8 @@
                     <img src = "{{ blog.preview | media_filter }}">
                     <div class="card-body">
                         <p class="card-text">{{ object.title }} - ({{ object.slug }})</p>
-                        <p class="card-text">Описание: {{ object.contents }}</p>
+                        <p class="card-text">Описание: {{ object.content }}</p>
+                        <p class="card-text">Цена: {{ object.price }}</p>
                         <p class="card-text">Публикация: {{ object.published }}</p>
                         <p class="card-text">Дата создания: {{ object.created_at }}</p>
                         <p class="card-text">Просмотры: {{ object.views }}</p>

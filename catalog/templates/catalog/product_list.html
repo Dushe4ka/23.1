@@ -1,6 +1,13 @@
 {% extends 'catalog/home.html' %}
 {% load my_tags %}
 {% block content %}
+<div class="row text-center">
+<form action="{% url 'catalog:list' %}" method="get">
+<input type="text" name="q" placeholder="Поиск товаров">
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+</div>
+
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row ">
@@ -9,6 +16,7 @@
                 <div class="col-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
+<!--                            <img src="{{ product.image | media_filter }}">-->
                             <p class="card-text">{{ object.name }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group-center">

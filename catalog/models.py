@@ -54,7 +54,7 @@ class Product(models.Model):
         verbose_name="Описание", help_text="Введите описание"
     )
     image = models.ImageField(
-        upload_to="product/photo",
+        upload_to="product/",
         verbose_name="Изображение",
         help_text="Загрузите изображение",
         blank=True,
@@ -139,6 +139,8 @@ class Version(models.Model):
 
     def __str__(self):
         return f'{self.product.name} - {self.number} ({self.name})'
+
+
 
 
 

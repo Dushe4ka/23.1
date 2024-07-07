@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -123,6 +124,17 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProductListView(ListView):
     model = Product
+    template_name = 'catalog/product_list.html'
+
+
+    def get_queryset(self): # новый
+        query = self.request.GET.get('q')
+        if query:
+            object_list = Product.objects.filter(
+                Q(name__icontains=query))
+            return object_list
+        else:
+            return Product.objects.all()
 
 
 class ProductDetailView(DetailView):
@@ -161,6 +173,22 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         context['category_item'] = category_item
         context['title'] = f'Категория #{category_item.pk}'
         return context
+
+
+class SearchView(ListView):
+    template_name = "catalog/product_list"
+    context_object_name = "product_search"
+    paginate_by = 5
+
+
+    def get_queryset(self):
+        return Product.objects.filter(title__icontanins=self.request.GET.get("q"))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["q"] = self.request.GET.get("q")
+        return context
+
 """
     Создание фикстуры для групп:
     python manage.py dumpdata auth > groups.json

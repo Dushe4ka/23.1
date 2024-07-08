@@ -1,0 +1,41 @@
+{% extends 'catalog/home.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row text-center">
+<form action="{% url 'catalog:list' %}" method="get">
+<input type="text" name="q" placeholder="Поиск товаров">
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+</div>
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row ">
+            <div class="row text-center">
+                {% for object in object_list %}
+                <div class="col-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+<!--                            <img src="{{ product.image | media_filter }}">-->
+                            <p class="card-text">{{ object.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group-center">
+                                    <a class="btn btn-primary" href="{% url 'catalog:view' object.pk %}"
+                                       role="button">Посмотреть</a>
+                                    {% if perms.catalog.can_edit_category and perms.catalog.can_edit_description or user == object.owner %}
+                                    <a class="btn btn-primary" href="{% url 'catalog:edit' object.pk %}"
+                                       role="button">Редактировать</a>
+                                    <a class="btn btn-warning" href="{% url 'catalog:delete' object.pk %}"
+                                       role="button">Удалить</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

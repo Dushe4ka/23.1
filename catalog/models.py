@@ -1,4 +1,5 @@
 from django.db import models, connection
+from django.urls import reverse
 
 from users.models import User
 
@@ -31,6 +32,10 @@ class Category(models.Model):
         unique=True,
         db_index=True,
     )
+    slug = models.SlugField('URL',  max_length=120, blank=True, null=True,)
+
+    def get_absolute_url(self):
+        return reverse('catalog:articles_by_category', kwargs={'slug': self.slug})
 
     @classmethod
     def truncate_table_restart_id(cls):

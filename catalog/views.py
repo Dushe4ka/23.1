@@ -137,6 +137,7 @@ class ProductListView(ListView):
             return Product.objects.all()
 
 
+
 class ProductDetailView(DetailView):
     model = Product
 
@@ -150,6 +151,20 @@ class ProductDetailView(DetailView):
 class ProductDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:list')
+
+
+class CategoryCreate(LoginRequiredMixin, CreateView):
+    model = Category
+    fields = ('title', 'description')
+    success_url = reverse_lazy('catalog:category_list')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_category = form.save()
+            new_category.slug = slugify(new_category.title)
+            new_category.save()
+
+            return super().form_valid(form)
 
 
 class CategoryListView(ListView):
@@ -168,10 +183,8 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        category_item = self.get_object()
-        context['category_item'] = category_item
-        context['title'] = f'Категория #{category_item.pk}'
+        context = super().get_context_data()
+        context['products'] = Product.objects.filter(category=self.object.id)
         return context
 
 
@@ -189,6 +202,22 @@ class SearchView(ListView):
         context["q"] = self.request.GET.get("q")
         return context
 
+
+class ProductModel(ListView):
+    model = Product
+    template_name = 'blog/articles_list.html'
+    context_object_name = 'articles'
+    category = None
+
+    def get_queryset(self):
+        self.category = Category.objects.get(slug=self.kwargs['slug'])
+        queryset = Product.objects.all().filter(category__slug=self.category.slug)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = f'Статьи из категории: {self.category.name}'
+        return context
 """
     Создание фикстуры для групп:
     python manage.py dumpdata auth > groups.json

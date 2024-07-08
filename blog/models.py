@@ -1,5 +1,6 @@
 from django.db import models
 
+from catalog.models import Category
 from users.models import User
 
 NULLABLE = {"blank": "True", "null": "True"}
@@ -7,6 +8,16 @@ NULLABLE = {"blank": "True", "null": "True"}
 
 class Blog(models.Model):
     title = models.CharField(max_length=50, verbose_name="Заголовок")
+    # category = models.ForeignKey(
+    #     Category,
+    #     on_delete=models.SET_NULL,
+    #     verbose_name="Категория",
+    #     help_text="Выберите категорию",
+    #     related_name="products",
+    #     null=True,
+    #     blank=True,
+    #     related_query_name="product",
+    # )
     slug = models.CharField(max_length=150, verbose_name="URL", **NULLABLE)
     content = models.TextField(verbose_name="Содержимое", **NULLABLE)
     price = models.DecimalField(

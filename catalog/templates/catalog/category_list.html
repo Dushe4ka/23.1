@@ -9,14 +9,15 @@
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <a href="{% url 'catalog:articles_by_category' category.slug%}">{{ category.name }}</a>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'catalog:category_detail' category.pk %}"
-                                   role="button">Просмотр</a>
+                        <p class="card-text">{{ category.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group-center">
+                                    <a class="btn btn-primary" href="{% url 'catalog:category_detail' category.pk %}"
+                                       role="button">Посмотреть</a>
+                                    <a class="btn btn-primary" href="{% url 'catalog:articles_by_category' category.slug %}"
+                                       role="button">Перейти к товарам</a>
+                                </div>
                             </div>
-
-                        </div>
                     </div>
                 </div>
             </div>
